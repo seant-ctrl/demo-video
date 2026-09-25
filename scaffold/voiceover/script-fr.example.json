@@ -1,0 +1,5 @@
+[
+ {"id": "p00", "text": "Nom de la feature : ce qu'elle fait, en une phrase."},
+ {"id": "p01", "text": "Première phrase du premier plan. Elle ne nomme que ce qui est à l'écran."},
+ {"id": "p99", "text": "Les deux ou trois règles qui expliquent tout ce qu'on a vu. Nom de la feature."}
+]

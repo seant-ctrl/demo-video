@@ -1,0 +1,653 @@
+<title>demo-video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+@font-face{font-family:'PP Telegraf';font-weight:700;font-display:swap;src:url(data:font/ttf;base64,@@PPTELEGRAF@@) format('truetype')}
+:root{
+  --ink:#00402F; --moss:#326E5E; --sage:#4C8676; --lime:#9FE870; --lime-ink:#1E4A12;
+  --paper:#F7FAF9; --surface:#FFFFFF; --mist:#E4EBE8; --mist-2:#D7E0DD; --text:#2D3331; --muted:#717A77; --faint:#96A39F;
+  --alert:#E56229; --alert-bg:#FFF1EA; --ok:#268504; --ok-bg:#EAF7E4;
+  --code-bg:#0F1F1A; --code-text:#D6F8D1;
+  --shadow:0 12px 40px rgba(0,64,47,.10);
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#DFF5DA; --moss:#9FD6C4; --sage:#7DB6A3; --lime:#9FE870; --lime-ink:#0B2A08;
+  --paper:#0E1714; --surface:#15211D; --mist:#24332D; --mist-2:#2E3F38; --text:#E6EEEA; --muted:#9BB0A8; --faint:#6E837B;
+  --alert:#FF9A6B; --alert-bg:#2A1A12; --ok:#8BE06A; --ok-bg:#15281A;
+  --code-bg:#0A120F; --code-text:#C9EFC0;
+  --shadow:0 12px 40px rgba(0,0,0,.45);
+}}
+:root[data-theme="dark"]{
+  --ink:#DFF5DA; --moss:#9FD6C4; --sage:#7DB6A3; --lime:#9FE870; --lime-ink:#0B2A08;
+  --paper:#0E1714; --surface:#15211D; --mist:#24332D; --mist-2:#2E3F38; --text:#E6EEEA; --muted:#9BB0A8; --faint:#6E837B;
+  --alert:#FF9A6B; --alert-bg:#2A1A12; --ok:#8BE06A; --ok-bg:#15281A;
+  --code-bg:#0A120F; --code-text:#C9EFC0;
+  --shadow:0 12px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+h1,h2,h3,h4{font-family:'PP Telegraf',Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.08;text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:clamp(38px,5.4vw,66px)}
+h2{font-size:clamp(30px,3.6vw,44px)}
+h3{font-size:24px;letter-spacing:-.01em}
+h4{font-size:18px;font-family:Inter,system-ui,sans-serif;letter-spacing:0}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage)}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--muted);max-width:62ch}
+.muted{color:var(--muted)}
+code,kbd,.mono{font-family:'JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace}
+code{font-size:.92em;background:var(--mist);padding:.1em .4em;border-radius:6px}
+kbd{font-size:.85em;border:1px solid var(--mist-2);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:var(--surface)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--mist)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'PP Telegraf',Inter,sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:3px;background:var(--lime)}
+.nav ul{display:flex;gap:6px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+.nav ul::-webkit-scrollbar{display:none}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap}
+.nav li a:hover,.nav li a:focus-visible{background:var(--mist);color:var(--ink);outline:none}
+.nav li a.cta{background:var(--ink);color:var(--paper)}
+:root[data-theme="dark"] .nav li a.cta{color:#0E1714}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .nav li a.cta{color:#0E1714}}
+
+/* hero */
+.hero{padding-block:clamp(48px,7vw,96px) clamp(32px,5vw,64px)}
+.hero .grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,56px);align-items:center}
+@media (max-width:860px){.hero .grid{grid-template-columns:1fr}}
+.hero h1{margin:14px 0 18px}
+.hero h1 em{font-style:normal;color:var(--sage)}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.ghost{border-color:var(--mist-2);color:var(--ink);background:var(--surface)}
+.btn:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0E1714}}
+:root[data-theme="dark"] .btn.primary{color:#0E1714}
+.facts{display:flex;flex-wrap:wrap;gap:8px 22px;margin-top:26px;font-size:14px;color:var(--muted)}
+.facts b{color:var(--text);font-weight:600}
+.player{margin:0;border-radius:18px;overflow:hidden;background:#00402F;box-shadow:var(--shadow);border:1px solid var(--mist)}
+.player video{display:block;width:100%;aspect-ratio:16/9;max-width:100%;background:#000}
+.player figcaption{display:flex;gap:8px;align-items:center;font-size:12.5px;font-weight:500;color:#D6F8D1;background:#00402F;padding:10px 14px}
+.player figcaption i{width:8px;height:8px;border-radius:50%;background:var(--lime);display:inline-block}
+
+/* sections */
+section{padding-block:clamp(48px,6vw,88px)}
+section.alt{background:var(--surface);border-block:1px solid var(--mist)}
+.sec-head{max-width:68ch;margin-bottom:clamp(28px,3vw,44px)}
+.sec-head h2{margin:10px 0 14px}
+
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.tiles{grid-template-columns:1fr}}
+.tile{background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);padding:24px}
+.tile .ico{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--ink);margin-bottom:16px}
+.tile .ico svg{width:22px;height:22px;stroke:var(--lime);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.tile h3{font-size:20px;margin-bottom:8px}
+.tile p{color:var(--muted);font-size:15.5px}
+
+/* examples */
+.examples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin-top:36px}
+@media (max-width:860px){.examples{grid-template-columns:1fr}}
+.ex{background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);overflow:hidden}
+.ex video{display:block;width:100%;aspect-ratio:16/9;background:#000}
+.ex .meta{padding:16px 20px 18px;display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+.ex .meta h4{font-family:'PP Telegraf',Inter,sans-serif;font-size:19px;color:var(--ink)}
+.ex .meta span{font-size:13.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* process strip */
+.strip{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;counter-reset:step}
+@media (max-width:1000px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.strip{grid-template-columns:1fr}}
+.step{position:relative;background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);padding:20px 18px 18px;min-height:190px}
+.step .n{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--faint);letter-spacing:.08em}
+.step h3{font-size:19px;margin:8px 0 8px}
+.step p{font-size:14.5px;color:var(--muted)}
+.step.you{background:var(--ink);border-color:var(--ink)}
+.step.you h3,.step.you .n{color:var(--lime)}
+.step.you p{color:#D6F8D1}
+.step .who{position:absolute;top:14px;right:14px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--mist);color:var(--muted)}
+.step.you .who{background:var(--lime);color:var(--lime-ink)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;font-size:14px;color:var(--muted)}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+
+/* install steps */
+.steps{display:grid;gap:26px}
+.istep{display:grid;grid-template-columns:64px minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:560px){.istep{grid-template-columns:1fr}}
+.istep .num{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--mist);font-family:'PP Telegraf',Inter,sans-serif;font-size:26px;color:var(--ink)}
+.istep .body{background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);padding:24px;display:grid;gap:14px}
+.istep h3{font-size:22px}
+.istep p,.istep li{font-size:16px}
+.istep ul,.istep ol{margin:0;padding-left:22px;display:grid;gap:6px}
+.tag{display:inline-block;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:var(--mist);color:var(--muted);vertical-align:middle;margin-left:8px}
+.tag.opt{background:var(--ok-bg);color:var(--ok)}
+.tag.req{background:var(--alert-bg);color:var(--alert)}
+
+/* code blocks */
+.cmd{position:relative;background:var(--code-bg);color:var(--code-text);border-radius:12px;padding:14px 56px 14px 18px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.55;overflow-x:auto;white-space:pre}
+.cmd .copy{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.08);color:#D6F8D1;border:1px solid rgba(255,255,255,.14);border-radius:8px;font:600 12px Inter,sans-serif;padding:6px 10px;cursor:pointer}
+.cmd .copy:hover{background:rgba(255,255,255,.16)}
+.cmd .copy:focus-visible{outline:2px solid var(--lime)}
+.cmd .c{color:#7FB59F}
+
+/* callouts */
+.note{border-left:4px solid var(--sage);background:var(--surface);padding:14px 18px;border-radius:10px;font-size:15.5px}
+.note.warn{border-left-color:var(--alert);background:var(--alert-bg)}
+.note.ok{border-left-color:var(--ok);background:var(--ok-bg)}
+.note b{font-weight:600}
+
+/* download cards */
+.dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.dl{grid-template-columns:1fr}}
+.dl a{display:grid;gap:4px;padding:16px;border-radius:12px;border:1px solid var(--mist-2);text-decoration:none;color:var(--text);background:var(--paper)}
+.dl a:hover{border-color:var(--sage)}
+.dl a b{font-weight:600;color:var(--ink)}
+.dl a span{font-size:13px;color:var(--muted)}
+.dl a code{font-size:12px;background:transparent;padding:0;color:var(--sage)}
+
+/* mac mockups */
+.mock{border-radius:14px;border:1px solid var(--mist-2);background:var(--paper);padding:18px;display:grid;gap:14px}
+.mock .cap{font-size:12.5px;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.macdlg{max-width:300px;margin:0 auto;background:#ECECEC;color:#111;border-radius:14px;padding:22px 18px 16px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25);font-family:-apple-system,Inter,sans-serif}
+.macdlg .app{width:64px;height:64px;border-radius:16px;margin:0 auto 12px;background:linear-gradient(135deg,#6d5cff,#c026d3);display:grid;place-items:center;color:#fff;font-weight:800;font-size:28px}
+.macdlg h5{margin:0 0 8px;font-size:13.5px;line-height:1.35}
+.macdlg p{font-size:11.5px;color:#444;line-height:1.35}
+.macdlg .b{margin-top:14px;display:grid;gap:6px}
+.macdlg .b span{display:block;padding:7px;border-radius:7px;font-size:12.5px;background:#fff;border:1px solid #cfcfcf}
+.macdlg .b span.primary{background:#2e6bff;color:#fff;border-color:#2e6bff}
+.macset{background:#F5F5F7;color:#111;border-radius:12px;overflow:hidden;border:1px solid #D9D9DE;font-family:-apple-system,Inter,sans-serif;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.macset .bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #E1E1E6;background:#ECECF0;font-size:13px;font-weight:600}
+.macset .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.macset .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;font-size:13px;border-bottom:1px solid #E7E7EB}
+.macset .row small{display:block;color:#666;font-size:12px;margin-top:2px}
+.macset .row .btn2{flex:none;background:#fff;border:1px solid #C9C9CF;border-radius:7px;padding:5px 10px;font-size:12.5px;font-weight:600;box-shadow:0 1px 0 rgba(0,0,0,.05)}
+.macset .row .btn2.hl{outline:3px solid var(--lime);outline-offset:2px}
+.macset .sec{padding:10px 14px 4px;font-size:12px;color:#666;font-weight:600}
+.pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
+@media (max-width:760px){.pair{grid-template-columns:1fr}}
+
+/* 11labs mock */
+.el{background:#0B0B0F;color:#F5F5F7;border-radius:12px;padding:16px;font-family:Inter,sans-serif;border:1px solid #23232B}
+.el .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:13px}
+.el .top b{font-weight:600}
+.el .k{background:#15151C;border:1px solid #2A2A34;border-radius:9px;padding:12px;display:grid;gap:8px;font-size:12.5px}
+.el .k label{color:#9A9AA6;font-size:11.5px}
+.el .k .in{background:#0B0B0F;border:1px solid #2A2A34;border-radius:7px;padding:8px 10px;font-family:'JetBrains Mono',monospace;font-size:12px}
+.el .k .perm{display:flex;justify-content:space-between;align-items:center}
+.el .k .sw{width:30px;height:17px;border-radius:999px;background:#3B3B48;position:relative}
+.el .k .sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff}
+.el .k .sw.on{background:var(--lime)}.el .k .sw.on::after{left:15px}
+.el .cta{margin-top:10px;display:inline-block;background:#fff;color:#0B0B0F;font-weight:600;font-size:12.5px;padding:7px 12px;border-radius:7px}
+
+/* docs */
+.docs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.docs{grid-template-columns:1fr}}
+.doc{background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr}
+.doc header{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid var(--mist)}
+.doc header .file{font-family:'JetBrains Mono',monospace;font-size:13.5px;color:var(--ink);font-weight:500}
+.doc header .role{margin-left:auto;font-size:12px;color:var(--muted)}
+.doc .x{padding:16px 18px 18px;display:grid;gap:10px}
+.doc .x p{font-size:15px}
+.doc .x .quote{font-size:13px;line-height:1.5;color:var(--muted);background:var(--paper);border:1px dashed var(--mist-2);border-radius:10px;padding:12px 14px;overflow-x:auto}
+.doc .x .quote table{border-collapse:collapse;font-size:12.5px;min-width:520px}
+.doc .x .quote td,.doc .x .quote th{padding:4px 8px;border-bottom:1px solid var(--mist);text-align:left;vertical-align:top}
+.doc .x .quote th{color:var(--ink);font-weight:600}
+
+/* questions list */
+.qs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.qs{grid-template-columns:1fr}}
+.q{background:var(--surface);border:1px solid var(--mist);border-radius:12px;padding:14px 16px;font-size:15px}
+.q b{display:block;color:var(--ink);font-weight:600;margin-bottom:3px}
+.q span{color:var(--muted);font-size:14px}
+
+/* timeline mock */
+.tl{background:#0F1418;border-radius:14px;padding:16px;color:#C9D1D9;font-family:'JetBrains Mono',monospace;font-size:11.5px;overflow-x:auto;border:1px solid #1E262C}
+.tl .rows{display:grid;grid-template-columns:96px 1fr;gap:6px 10px;min-width:640px}
+.tl .lbl{color:#8B98A5;align-self:center}
+.tl .lane{position:relative;height:28px;background:#151B21;border-radius:6px;overflow:hidden}
+.tl .blk{position:absolute;top:3px;bottom:3px;border-radius:5px;display:flex;align-items:center;padding:0 8px;font-size:10.5px;color:#fff;white-space:nowrap;overflow:hidden}
+.tl .v{background:#2B4A6E;border:1px solid #4A7EB8}
+.tl .a{background:#2E5E4E;border:1px solid #4CA88A}
+.tl .c{background:#5B3E7A;border:1px solid #9A6BC9}
+.tl .m{position:absolute;top:0;bottom:0;width:2px;background:var(--lime)}
+.tl .ruler{grid-column:2;display:flex;justify-content:space-between;color:#5F6B76;padding:0 2px}
+
+/* framewave section */
+.fw{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:32px;align-items:center}
+@media (max-width:900px){.fw{grid-template-columns:1fr}}
+.shot{border-radius:14px;overflow:hidden;border:1px solid var(--mist);box-shadow:var(--shadow)}
+.shot img{display:block;width:100%}
+.feats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:22px}
+@media (max-width:560px){.feats{grid-template-columns:1fr}}
+.feat{background:var(--surface);border:1px solid var(--mist);border-radius:12px;padding:14px 16px;font-size:14.5px}
+.feat b{display:block;color:var(--ink);font-weight:600}
+
+/* faq */
+details{background:var(--surface);border:1px solid var(--mist);border-radius:12px;padding:0 20px}
+details+details{margin-top:10px}
+summary{cursor:pointer;padding:16px 0;font-weight:600;color:var(--ink);list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--sage);font-weight:700;font-size:20px;line-height:1}
+details[open] summary::after{content:"–"}
+details .a{padding:0 0 18px;color:var(--text);font-size:15.5px;display:grid;gap:10px}
+
+footer{padding-block:40px 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--mist)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
+.sheet{border-radius:14px;overflow:hidden;border:1px solid var(--mist);box-shadow:var(--shadow)}
+.sheet img{display:block;width:100%}
+.frames{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+@media (max-width:760px){.frames{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.frames figure{margin:0;border-radius:10px;overflow:hidden;border:1px solid var(--mist);background:var(--surface)}
+.frames img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.frames figcaption{font-size:12.5px;color:var(--muted);padding:8px 10px}
+@media (prefers-reduced-motion: no-preference){
+  .tile,.step,.doc,.q,.feat{transition:transform .2s ease,border-color .2s ease}
+  .tile:hover,.doc:hover,.feat:hover{transform:translateY(-2px);border-color:var(--sage)}
+}
+</style>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="dot" aria-hidden="true"></span>/demo-video</a>
+    <ul>
+      <li><a href="#resultat">Le résultat</a></li>
+      <li><a href="#process">Comment ça marche</a></li>
+      <li><a href="#installer">Installer</a></li>
+      <li><a href="#utiliser">Utiliser</a></li>
+      <li><a href="#framewave">Framewave</a></li>
+      <li><a href="#faq">Questions</a></li>
+      <li><a class="cta" href="#installer">Commencer</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap grid">
+    <div>
+      <p class="eyebrow">Zeliq · Produit, Growth, Marketing, Sales</p>
+      <h1>Une vidéo de démo produit, <em>sans logiciel de montage.</em></h1>
+      <p class="lead">Tu donnes un prototype, une URL ou des slides. Claude écrit le storyboard et la voix off, fabrique le film, et l'ouvre dans Framewave pour la retouche finale.</p>
+      <div class="actions">
+        <a class="btn primary" href="#installer">Installer, 20 min</a>
+        <a class="btn ghost" href="#utiliser">Comment on l'utilise</a>
+      </div>
+      <div class="facts">
+        <span><b>1080p</b> · 60 s à 4 min</span>
+        <span><b>Voix off</b> FR ou EN</span>
+        <span><b>Sous-titres</b> inclus</span>
+        <span><b>Zéro texte inventé</b></span>
+      </div>
+    </div>
+    <figure class="player">
+      <video controls preload="metadata" poster="media/agents-signals-poster.jpg" src="media/agents-signals-720.mp4" playsinline></video>
+      <figcaption><i></i>Agents Signals · 2 min 11 · fait avec /demo-video</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section id="resultat" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Ce que tu obtiens</p>
+      <h2>Un film, ses documents, et un projet que tu peux modifier.</h2>
+    </div>
+    <div class="tiles">
+      <article class="tile">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg></div>
+        <h3>Le film</h3>
+        <p>MP4 1080p à la durée choisie. Zooms sur ce que la voix cite, curseur, pastilles, cartons titre et fin à la marque Zeliq.</p>
+      </article>
+      <article class="tile">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v6h6M8 13h8M8 17h6"/></svg></div>
+        <h3>Les documents</h3>
+        <p>Storyboard, découpage, script de voix off, plan de production. Tu les relis et les corriges avant la fabrication.</p>
+      </article>
+      <article class="tile">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 7h18M3 12h18M3 17h18"/><rect x="5" y="5" width="6" height="4" rx="1" fill="#9FE870" stroke="none"/><rect x="9" y="10" width="8" height="4" rx="1" fill="#9FE870" stroke="none"/></svg></div>
+        <h3>Le projet Framewave</h3>
+        <p>Un clip par plan, la voix en blocs déplaçables, les sous-titres déjà écrits. Tu retouches, tu exportes.</p>
+      </article>
+    </div>
+
+    <div class="examples">
+      <article class="ex">
+        <video controls preload="none" poster="media/agents-signals-poster.jpg" src="media/agents-signals-720.mp4" playsinline></video>
+        <div class="meta"><h4>Agents Signals</h4><span>2 min 11 · 19 plans · depuis un prototype HTML</span></div>
+      </article>
+      <article class="ex">
+        <video controls preload="none" poster="media/mail-deliverability-poster.jpg" src="media/mail-deliverability-720.mp4" playsinline></video>
+        <div class="meta"><h4>Mail Deliverability</h4><span>3 min 30 · 32 plans · deux rôles</span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Comment ça marche</p>
+      <h2>Cinq étapes. Tu décides à deux moments, Claude fait le reste.</h2>
+    </div>
+    <div class="strip">
+      <article class="step you">
+        <span class="who">Toi</span><span class="n">01</span>
+        <h3>Tu donnes une source</h3>
+        <p>Un prototype, une page de l'app, un deck ou une vidéo. Avec, si possible, un guide des flows à montrer.</p>
+      </article>
+      <article class="step">
+        <span class="who">Claude</span><span class="n">02</span>
+        <h3>Il pose quelques questions</h3>
+        <p>Public, durée, langue, voix off, et qui écrit le parcours : lui, ou toi.</p>
+      </article>
+      <article class="step you">
+        <span class="who">Toi</span><span class="n">03</span>
+        <h3>Tu relis 4 documents</h3>
+        <p>Storyboard, découpage, script, plan de production. Tu corriges, tu dis « go ».</p>
+      </article>
+      <article class="step">
+        <span class="who">Claude</span><span class="n">04</span>
+        <h3>Il fabrique</h3>
+        <p>Captures, voix off, animation, contrôle image par image, rendu. 15 à 40 minutes sans toi.</p>
+      </article>
+      <article class="step you">
+        <span class="who">Toi</span><span class="n">05</span>
+        <h3>Tu finis dans Framewave</h3>
+        <p>Le projet s'ouvre monté. Tu ajustes, tu exportes.</p>
+      </article>
+    </div>
+    <div class="legend"><span><i style="background:var(--ink)"></i>Tu décides</span><span><i style="background:var(--surface);border:1px solid var(--mist-2)"></i>Claude travaille</span></div>
+
+    <div style="margin-top:44px" class="pair">
+      <div>
+        <h3 style="margin-bottom:10px">Propre du premier coup</h3>
+        <p>Chaque image est vérifiée avant le rendu : rien ne sort du cadre, le texte cité est lisible, aucun plan trop court. Claude relit ensuite des planches comme celle-ci.</p>
+        <p class="muted" style="font-size:15px;margin-top:10px">La règle de base : un plan dure au moins le temps de sa phrase. On ne compresse jamais la voix.</p>
+      </div>
+      <figure class="sheet" style="margin:0"><img src="media/sheet1.jpg" alt="Planche-contact : 24 vignettes du film, une toutes les 3 secondes" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<section id="installer" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Installer · une fois</p>
+      <h2>Quatre choses à installer, une à vérifier.</h2>
+      <p class="lead">Sur Mac. Framewave existe aussi pour Windows, le skill n'y a pas encore été testé.</p>
+    </div>
+
+    <div class="steps">
+      <div class="istep">
+        <div class="num">1</div>
+        <div class="body">
+          <h3>Claude Code <span class="tag req">requis</span></h3>
+          <p>L'application <b>Claude</b> pour Mac, onglet <b>Code</b> : <a href="https://claude.ai/download" target="_blank" rel="noopener">claude.ai/download</a>. Connecte-toi avec ton compte Zeliq.</p>
+          <p>Il faut aussi <b>Google Chrome</b> et <b>Node.js</b> :</p>
+          <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>brew install node</div>
+          <p class="muted" style="font-size:14.5px">Pas de Homebrew ? Installeur sur <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>.</p>
+        </div>
+      </div>
+
+      <div class="istep">
+        <div class="num">2</div>
+        <div class="body">
+          <h3>Le skill <span class="tag req">requis</span></h3>
+          <p>Le dépôt est public. Dans le Terminal :</p>
+          <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>git clone https://github.com/seant-ctrl/demo-video.git ~/.claude/commands/demo-video</div>
+          <p class="muted" style="font-size:14.5px">Redémarre Claude Code : <code>/demo-video</code> apparaît. Puis, une fois, les bonnes pratiques du moteur d'animation :</p>
+          <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>npx skills add remotion-dev/skills -g -a claude-code -s remotion-best-practices -s remotion-markup -s remotion-render -s remotion-studio -y</div>
+          <div class="note"><b>Police Zeliq, optionnel.</b> Les cartons titre et fin utilisent PP Telegraf si elle est sur ton Mac, sinon Inter. La police est sous licence, donc hors du dépôt : demande le fichier à Sean et range-le ici.
+            <div class="cmd" style="margin-top:10px"><button class="copy" type="button" data-copy>Copier</button>mkdir -p ~/.demo-video/fonts && mv ~/Downloads/PPTelegraf-Bold.ttf ~/.demo-video/fonts/</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="istep">
+        <div class="num">3</div>
+        <div class="body">
+          <h3>Framewave <span class="tag req">requis</span></h3>
+          <p>L'éditeur où le résultat s'ouvre. Tout reste sur ton Mac, rien n'est envoyé en ligne.</p>
+          <div class="dl">
+            <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Mac Apple Silicon</b><span>M1 à M4</span><code>…-arm64.dmg</code></a>
+            <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Mac Intel</b><span>Mac d'avant 2021</span><code>…-x64.dmg</code></a>
+            <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Windows</b><span>10 ou 11</span><code>Framewave.Setup….exe</code></a>
+          </div>
+          <p class="muted" style="font-size:14.5px">Quel Mac ? Menu  → À propos de ce Mac. « Puce Apple » = Apple Silicon. Glisse Framewave dans Applications.</p>
+
+          <h4 style="margin-top:6px">Premier lancement : macOS bloque, une fois</h4>
+          <div class="pair">
+            <div class="mock">
+              <span class="cap">1 · Clique « Terminé »</span>
+              <div class="macdlg" role="img" aria-label="Boîte de dialogue macOS de blocage, bouton Terminé">
+                <div class="app">F</div>
+                <h5>Apple n'a pas pu vérifier que « Framewave » ne contient pas de logiciel malveillant.</h5>
+                <div class="b"><span class="primary">Terminé</span><span>Placer dans la corbeille</span></div>
+              </div>
+            </div>
+            <div class="mock">
+              <span class="cap">2 · Réglages Système → Confidentialité et sécurité → « Ouvrir quand même »</span>
+              <div class="macset" role="img" aria-label="Réglages Système, section Sécurité, bouton Ouvrir quand même">
+                <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i>&nbsp;Confidentialité et sécurité</div>
+                <div class="sec">Sécurité</div>
+                <div class="row"><div>« Framewave » a été bloqué pour protéger votre Mac.<small>Tout en bas de la page</small></div><span class="btn2 hl">Ouvrir quand même</span></div>
+              </div>
+              <p class="muted" style="font-size:14px">Confirme avec Touch ID. macOS ne redemandera plus.</p>
+            </div>
+          </div>
+          <div class="note">Message « application endommagée » ? Dans le Terminal : <code>xattr -cr /Applications/Framewave.app</code></div>
+          <p class="muted" style="font-size:14.5px">Ouvre Framewave une fois. Tout ce qu'il sait faire : <a href="https://claude.ai/artifact/Se4nBDv36GZrrwSkx1C9MX" target="_blank" rel="noopener">la page Framewave</a>.</p>
+        </div>
+      </div>
+
+      <div class="istep">
+        <div class="num">4</div>
+        <div class="body">
+          <h3>Clé ElevenLabs pour la voix off <span class="tag opt">optionnel</span></h3>
+          <p>Sans clé : film muet avec légendes, et le script de voix off quand même. Avec : une voix naturelle, une phrase par plan.</p>
+          <div class="pair">
+            <ol>
+              <li><a href="https://elevenlabs.io/app/sign-in" target="_blank" rel="noopener">elevenlabs.io</a>, identifiants dans <b>1Password</b> (coffre partagé, « ElevenLabs »).</li>
+              <li>Profil en bas à gauche → <b>API Keys</b> → <b>Create API Key</b>.</li>
+              <li>Nomme-la à ton prénom. Permission : <b>Text to Speech</b> seulement.</li>
+              <li>Copie la clé (elle ne se réaffiche pas) et range-la :</li>
+            </ol>
+            <div class="el" role="img" aria-label="Écran ElevenLabs de création de clé : nom, permission Text to Speech activée, bouton Create">
+              <div class="top"><b>Create API Key</b><span style="color:#9A9AA6">elevenlabs.io</span></div>
+              <div class="k">
+                <label>Name</label><div class="in">demo-video-marie</div>
+                <label style="margin-top:4px">Permissions</label>
+                <div class="perm"><span>Text to Speech</span><span class="sw on"></span></div>
+                <div class="perm"><span>Speech to Text</span><span class="sw"></span></div>
+                <div class="perm"><span>Voices, Dubbing, Agents…</span><span class="sw"></span></div>
+              </div>
+              <span class="cta">Create</span>
+            </div>
+          </div>
+          <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>mkdir -p ~/.demo-video && printf 'ELEVENLABS_API_KEY=COLLE_TA_CLE_ICI\n' > ~/.demo-video/.env && chmod 600 ~/.demo-video/.env</div>
+          <div class="note warn"><b>Jamais la clé dans une conversation Claude ni dans Slack.</b> Ce fichier est son seul endroit. En cas de fuite : révoque et recrée, une minute.</div>
+        </div>
+      </div>
+
+      <div class="istep">
+        <div class="num">5</div>
+        <div class="body">
+          <h3>Vérifier</h3>
+          <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>bash ~/.claude/commands/demo-video/scripts/preflight.sh</div>
+          <div class="note ok">Des ✅ partout, c'est bon. Un ⚠️ sur ElevenLabs veut juste dire « pas de voix off ».</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="utiliser">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Utiliser</p>
+      <h2>Une commande, quelques questions, un « go ».</h2>
+    </div>
+
+    <div class="cmd" style="margin-bottom:28px"><button class="copy" type="button" data-copy>Copier</button><span class="c"># un prototype et son guide de lecture</span>
+/demo-video ~/protos/agents-signals.html --guide ~/protos/agents-signals-guide.md
+
+<span class="c"># une page de l'app en ligne</span>
+/demo-video https://app.zeliq.com/leads
+
+<span class="c"># un deck en PDF, en anglais, 60 à 90 secondes</span>
+/demo-video ~/Downloads/pitch.pdf --lang en --window 60-90</div>
+
+    <h3 style="margin-bottom:14px">Ce que Claude demande</h3>
+    <div class="qs">
+      <div class="q"><b>Pour qui</b><span>Marketing, onboarding, sales ou interne. Ça change le ton.</span></div>
+      <div class="q"><b>Combien de temps</b><span>De 60 s à 4 min. Deux rôles = la fenêtre longue.</span></div>
+      <div class="q"><b>Quelle langue</b><span>Voix française ou anglaise.</span></div>
+      <div class="q"><b>Qui écrit le parcours</b><span>Claude le propose, ou tu le dictes : « on commence ici, on montre les payants, puis les managers ».</span></div>
+      <div class="q"><b>Voix off, musique</b><span>Voix générée, script seul, ou muet. Musique si tu fournis un fichier.</span></div>
+      <div class="q"><b>Curseur et zooms</b><span>Curseur avec clics, zooms dans l'image ou retouchables dans Framewave.</span></div>
+    </div>
+
+    <h3 style="margin:44px 0 6px">Les quatre documents à relire avant le « go »</h3>
+    <p class="muted" style="margin-bottom:18px;max-width:70ch">Dans un dossier <code>motion/</code> à côté de ta source. Modifie-les directement, Claude les relit au « go ». Extraits réels d'Agents Signals.</p>
+    <div class="docs">
+      <article class="doc">
+        <header><span class="file">storyboard.md</span><span class="role">ce qu'on montre, et pourquoi</span></header>
+        <div class="x">
+          <p>Plan par plan : l'écran, l'action, le texte ajouté, l'intention. Plus ce qui a été écarté et ce que la source ne contient pas.</p>
+          <div class="quote"><table><tr><th>#</th><th>Durée</th><th>Écran</th><th>Action</th><th>Intention</th></tr><tr><td>P06</td><td>8,5 s</td><td>Fiche agent</td><td>Clic « Demander l'activation » → « Demande envoyée »</td><td>Tu demandes, l'équipe valide</td></tr><tr><td>P13</td><td>6,0 s</td><td>Onglet Actifs</td><td>Interrupteur → « En pause », puis « Actif »</td><td>Pause, reprise, sans ticket</td></tr></table></div>
+        </div>
+      </article>
+      <article class="doc">
+        <header><span class="file">script-breakdown.md</span><span class="role">ce que l'animation fait</span></header>
+        <div class="x">
+          <p>Pour chaque plan : captures, caméra, curseur, surlignages, pastilles. Et la liste de tous les textes ajoutés.</p>
+          <div class="quote">« P13 · La ligne fait 1572 px : aucun zoom ne garde le nom, le badge et l'interrupteur. On reste sur la ligne entière, c'est la légende qui porte le message. »</div>
+        </div>
+      </article>
+      <article class="doc">
+        <header><span class="file">voiceover-script.md</span><span class="role">la voix, alignée sur l'image</span></header>
+        <div class="x">
+          <p>Une phrase par plan, avec ce qui est visible quand elle est dite. La voix ne décrit jamais ce qu'on ne voit pas.</p>
+          <div class="quote"><table><tr><th>#</th><th>Visible</th><th>Voix</th><th>Durée</th></tr><tr><td>P11</td><td>Zoom sur le callout crédits</td><td>Le débit se fait à l'insertion uniquement.</td><td>2,6 s</td></tr><tr><td>P16</td><td>Popover de Nelly Hempel</td><td>Au survol, le pourquoi maintenant : la source, le fit ICP, les labels.</td><td>5,5 s</td></tr></table></div>
+        </div>
+      </article>
+      <article class="doc">
+        <header><span class="file">tasks.md</span><span class="role">le plan de production</span></header>
+        <div class="x">
+          <p>L'ordre des tâches, les décisions prises, les questions ouvertes, et 12 critères de qualité vérifiés sur le rendu.</p>
+          <div class="quote">C3 · Rien ne sort du cadre → ✅ 3 925 images vérifiées, 0 défaut.<br>C11 · Un plan dure au moins sa phrase → ✅ marge de 0,5 à 3,4 s partout.</div>
+        </div>
+      </article>
+    </div>
+
+    <div class="pair" style="margin-top:44px">
+      <div>
+        <h3 style="margin-bottom:10px">Après le « go »</h3>
+        <p>15 à 40 minutes sans toi. Puis <b>Framewave s'ouvre</b> : ton projet est la première vignette de l'accueil. Sur la timeline, un clip par plan, la voix en blocs, les sous-titres, un marqueur par plan.</p>
+      </div>
+      <div class="tl" role="img" aria-label="Schéma de la timeline livrée : piste vidéo avec un clip par plan, piste audio avec un bloc de voix par plan, sous-titres, marqueurs">
+        <div class="rows">
+          <span class="lbl"></span><div class="ruler"><span>0:00</span><span>0:20</span><span>0:40</span><span>1:00</span></div>
+          <span class="lbl">Vidéo</span><div class="lane"><span class="blk v" style="left:0;width:9%">P00 titre</span><span class="blk v" style="left:9.5%;width:12%">P01</span><span class="blk v" style="left:22%;width:16%">P02</span><span class="blk v" style="left:38.5%;width:12%">P03</span><span class="blk v" style="left:51%;width:14%">P04</span><span class="blk v" style="left:65.5%;width:12%">P05</span><span class="blk v" style="left:78%;width:22%">P06</span><i class="m" style="left:9.5%"></i><i class="m" style="left:22%"></i><i class="m" style="left:38.5%"></i><i class="m" style="left:51%"></i><i class="m" style="left:65.5%"></i><i class="m" style="left:78%"></i></div>
+          <span class="lbl">Voix off</span><div class="lane"><span class="blk a" style="left:.5%;width:6%">p00</span><span class="blk a" style="left:10%;width:8%">p01</span><span class="blk a" style="left:22.5%;width:12%">p02</span><span class="blk a" style="left:39%;width:8%">p03</span><span class="blk a" style="left:51.5%;width:10%">p04</span><span class="blk a" style="left:66%;width:6%">p05</span><span class="blk a" style="left:78.5%;width:12%">p06</span></div>
+          <span class="lbl">Sous-titres</span><div class="lane"><span class="blk c" style="left:.5%;width:6%">Agents Signals…</span><span class="blk c" style="left:10%;width:8%">Il vit dans la sidebar.</span><span class="blk c" style="left:22.5%;width:12%">Le catalogue tient…</span><span class="blk c" style="left:39%;width:8%">Les agents à venir…</span><span class="blk c" style="left:51.5%;width:10%">Ouvre LinkedIn Scraper…</span><span class="blk c" style="left:66%;width:6%">Et ce qu'il…</span><span class="blk c" style="left:78.5%;width:12%">Tu ne l'actives pas…</span></div>
+          <span class="lbl">Musique</span><div class="lane"><span class="blk" style="left:0;width:100%;background:#3A3F46;border:1px solid #5A616B;color:#B7C0CA">optionnelle</span></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:44px 0 12px">Image par image</h3>
+    <div class="frames">
+      <figure><img src="media/frame-000020.jpg" alt="Plan large du catalogue" loading="lazy"><figcaption>Plan large, la page entière</figcaption></figure>
+      <figure><img src="media/frame-000040.jpg" alt="Curseur sur le bouton Demander l'activation" loading="lazy"><figcaption>Curseur et cadre avant le clic</figcaption></figure>
+      <figure><img src="media/frame-000122.jpg" alt="Zoom sur le callout crédits avec pastille" loading="lazy"><figcaption>Zoom sur le texte cité, pastille</figcaption></figure>
+      <figure><img src="media/frame-000158.jpg" alt="Clic sur une ligne de Mes prospects" loading="lazy"><figcaption>Clic, ondulation</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section id="framewave" class="alt">
+  <div class="wrap">
+    <div class="fw">
+      <div>
+        <p class="eyebrow">Framewave</p>
+        <h2 style="margin:10px 0 14px">L'éditeur où tu finis la vidéo.</h2>
+        <p class="lead" style="margin-bottom:16px">Enregistreur d'écran et éditeur vidéo local, développé par Sean. Le skill te livre un projet déjà monté.</p>
+        <div class="feats">
+          <div class="feat"><b>Décaler une phrase</b>La voix est en blocs séparés. Les images ne bougent pas.</div>
+          <div class="feat"><b>Corriger un sous-titre</b>Le texte vient du script. Whisper peut retranscrire mot à mot.</div>
+          <div class="feat"><b>Ajouter un zoom ou un texte</b>Sans rien re-fabriquer.</div>
+          <div class="feat"><b>Exporter</b>MP4 1080p, en moins d'une minute.</div>
+        </div>
+        <div class="actions" style="margin-top:22px">
+          <a class="btn primary" href="https://claude.ai/artifact/Se4nBDv36GZrrwSkx1C9MX" target="_blank" rel="noopener">Tout ce que fait Framewave</a>
+          <a class="btn ghost" href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener">Télécharger</a>
+        </div>
+      </div>
+      <figure class="shot" style="margin:0"><img src="media/framewave-editor.jpg" alt="Framewave sur Mac avec un projet /demo-video : aperçu d'un plan Zeliq sous-titré, panneau Zoom à droite, timeline avec un clip par plan, la voix en blocs et les sous-titres" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Questions fréquentes</p>
+      <h2>Avant de demander à Sean.</h2>
+    </div>
+    <details open>
+      <summary>C'est quoi, une bonne source ?</summary>
+      <div class="a"><p>Un prototype HTML dont chaque état est atteignable, avec un <b>guide de lecture</b> : les rôles, les flows, les libellés exacts. Sans guide, Claude en écrit un et te le fait valider. Une URL de l'app marche aussi, avec un compte de démo.</p></div>
+    </details>
+    <details>
+      <summary>Claude peut inventer un écran ou un texte ?</summary>
+      <div class="a"><p>Non. Les captures sont des états réels de la source, sans texte injecté. Les seuls ajouts sont les pastilles et les cartons, tous listés. Ce que la source ne montre pas est signalé, pas comblé.</p></div>
+    </details>
+    <details>
+      <summary>Je ne vois pas mon projet dans Framewave.</summary>
+      <div class="a"><p>Il est en <b>première vignette de l'accueil</b>. Si Framewave était déjà ouvert sur autre chose, reviens à l'accueil (bouton en haut à gauche).</p></div>
+    </details>
+    <details>
+      <summary>Pas de voix off générée.</summary>
+      <div class="a"><p>Clé absente de <code>~/.demo-video/.env</code>, clé sans la permission Text to Speech (401), ou voix hors catalogue sur le plan Free (402). La voix par défaut, George, marche sur tous les plans.</p></div>
+    </details>
+    <details>
+      <summary>Trop long, trop court ?</summary>
+      <div class="a"><p>Dis à Claude « coupe P12 » ou « raccourcis la partie manager ». Il re-rend seulement les plans touchés et rebâtit le projet.</p></div>
+    </details>
+    <details>
+      <summary>Ça coûte quoi ?</summary>
+      <div class="a"><p>Ton abonnement Claude, et 1 500 à 2 000 crédits ElevenLabs pour deux minutes de voix. Framewave est gratuit.</p></div>
+    </details>
+    <details>
+      <summary>Et sur Windows ?</summary>
+      <div class="a"><p>Framewave oui. Le skill pas encore : il a été construit sur Mac. Dis-le à Sean si le besoin est là.</p></div>
+    </details>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Skill : <a href="https://github.com/seant-ctrl/demo-video" target="_blank" rel="noopener">seant-ctrl/demo-video</a></span>
+    <span>Éditeur : <a href="https://github.com/seant-ctrl/framewave" target="_blank" rel="noopener">seant-ctrl/framewave</a></span>
+    <span>Questions : Sean Tiffonnet.</span>
+  </div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    var block = btn.parentElement.cloneNode(true);
+    block.querySelector('.copy').remove();
+    var text = block.textContent.split('\n').filter(function(l){return !/^\s*#/.test(l);}).join('\n').trim();
+    var done = function(){ btn.textContent = 'Copié'; setTimeout(function(){ btn.textContent = 'Copier'; }, 1600); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function(){ fallback(); });
+    else fallback();
+    function fallback(){ var r = document.createRange(); r.selectNodeContents(btn.parentElement); var s = getSelection(); s.removeAllRanges(); s.addRange(r); try { document.execCommand('copy'); done(); } catch(e) {} }
+  });
+});
+</script>

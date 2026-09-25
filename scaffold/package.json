@@ -1,0 +1,40 @@
+{
+  "name": "demo-video-motion",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pipeline motion design d'une démo produit : captures → Remotion → clips par plan → projet Framewave",
+  "scripts": {
+    "login": "node capture/login.mjs",
+    "capture": "node capture/capture.mjs && node scripts/gen-data.mjs",
+    "slides": "node scripts/slides-to-shots.mjs && node scripts/gen-data.mjs",
+    "vo": "node voiceover/generate.mjs && node scripts/gen-data.mjs",
+    "vo:force": "node voiceover/generate.mjs --force && node scripts/gen-data.mjs",
+    "data": "node scripts/gen-data.mjs",
+    "timeline": "node scripts/timeline.mjs",
+    "check": "node scripts/check-safe.mjs",
+    "studio": "remotion studio",
+    "preview": "remotion render Demo out/preview.mp4 --scale 0.5",
+    "sheets": "remotion still Sheet1 out/sheets/sheet1.png && remotion still Sheet2 out/sheets/sheet2.png && remotion still Sheet3 out/sheets/sheet3.png",
+    "still": "remotion still Demo out/sheets/still-title.png --frame 40",
+    "render": "remotion render Demo out/demo.mp4 --codec h264 --crf 18",
+    "clips": "node scripts/render-clips.mjs",
+    "framewave": "node scripts/framewave-project.mjs",
+    "open": "node scripts/open-framewave.mjs",
+    "ship": "npm run check && npm run clips && npm run framewave && npm run open"
+  },
+  "dependencies": {
+    "@remotion/bundler": "^4.0.524",
+    "@remotion/cli": "^4.0.524",
+    "@remotion/fonts": "^4.0.524",
+    "@remotion/media": "^4.0.524",
+    "@remotion/renderer": "^4.0.524",
+    "@remotion/transitions": "^4.0.524",
+    "@types/react": "^19.2.18",
+    "puppeteer-core": "^25.11.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remotion": "^4.0.524",
+    "typescript": "^5.9.3"
+  }
+}

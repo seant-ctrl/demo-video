@@ -1,0 +1,35 @@
+{
+  "$schema": "demo-video/1",
+  "name": "Ma démo",
+  "slug": "ma-demo",
+  "lang": "fr",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "window": [60, 120],
+  "voiceover": true,
+  "titleCard": true,
+  "outroCard": true,
+  "title": { "voId": "p00", "tail": 60 },
+  "outro": { "voId": "p99", "tail": 15 },
+  "zooms": "baked",
+  "cursor": true,
+  "sfxClick": true,
+  "framewave": {
+    "voTrack": "separate",
+    "captions": true,
+    "markers": true,
+    "transitions": { "afterTitle": "fade", "beforeOutro": "fade", "default": "cut", "durationMs": 400 },
+    "music": null,
+    "musicVolume": 0.12
+  },
+  "capture": {
+    "kind": "artifact",
+    "source": "capture/proto.html",
+    "cssWidth": 1600,
+    "dpr": 2,
+    "defaultHeight": 900,
+    "chrome": "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "profileDir": null
+  }
+}

@@ -1,0 +1,5 @@
+.env
+node_modules
+out
+# Police commerciale sous licence (Pangram Pangram) : jamais dans le repo
+public/fonts/PPTelegraf*

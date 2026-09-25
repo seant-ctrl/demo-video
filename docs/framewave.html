@@ -1,0 +1,306 @@
+<title>Framewave</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+@font-face{font-family:'PP Telegraf';font-weight:700;font-display:swap;src:url(data:font/ttf;base64,@@PPTELEGRAF@@) format('truetype')}
+:root{
+  --ink:#00402F; --moss:#326E5E; --sage:#4C8676; --lime:#9FE870; --lime-ink:#1E4A12;
+  --paper:#F7FAF9; --surface:#FFFFFF; --mist:#E4EBE8; --mist-2:#D7E0DD; --text:#2D3331; --muted:#717A77; --faint:#96A39F;
+  --alert:#E56229; --alert-bg:#FFF1EA; --ok:#268504; --ok-bg:#EAF7E4;
+  --code-bg:#0F1F1A; --code-text:#D6F8D1; --shadow:0 12px 40px rgba(0,64,47,.10); --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ink:#DFF5DA; --moss:#9FD6C4; --sage:#7DB6A3; --lime:#9FE870; --lime-ink:#0B2A08;
+  --paper:#0E1714; --surface:#15211D; --mist:#24332D; --mist-2:#2E3F38; --text:#E6EEEA; --muted:#9BB0A8; --faint:#6E837B;
+  --alert:#FF9A6B; --alert-bg:#2A1A12; --ok:#8BE06A; --ok-bg:#15281A; --code-bg:#0A120F; --code-text:#C9EFC0; --shadow:0 12px 40px rgba(0,0,0,.45);
+}}
+:root[data-theme="dark"]{
+  --ink:#DFF5DA; --moss:#9FD6C4; --sage:#7DB6A3; --lime:#9FE870; --lime-ink:#0B2A08;
+  --paper:#0E1714; --surface:#15211D; --mist:#24332D; --mist-2:#2E3F38; --text:#E6EEEA; --muted:#9BB0A8; --faint:#6E837B;
+  --alert:#FF9A6B; --alert-bg:#2A1A12; --ok:#8BE06A; --ok-bg:#15281A; --code-bg:#0A120F; --code-text:#C9EFC0; --shadow:0 12px 40px rgba(0,0,0,.45);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:var(--moss)}
+h1,h2,h3{font-family:'PP Telegraf',Inter,system-ui,sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.08;text-wrap:balance;margin:0;color:var(--ink)}
+h1{font-size:clamp(36px,5vw,60px)} h2{font-size:clamp(28px,3.4vw,40px)} h3{font-size:22px;letter-spacing:-.01em}
+h4{font-size:17px;font-weight:600;margin:0;color:var(--ink)}
+p{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+.eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--sage)}
+.lead{font-size:clamp(18px,1.6vw,21px);color:var(--muted);max-width:62ch}
+.muted{color:var(--muted)}
+code,kbd{font-family:'JetBrains Mono',ui-monospace,Menlo,monospace}
+code{font-size:.92em;background:var(--mist);padding:.1em .4em;border-radius:6px}
+kbd{font-size:.85em;border:1px solid var(--mist-2);border-bottom-width:2px;border-radius:6px;padding:.05em .45em;background:var(--surface)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--mist)}
+.nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-family:'PP Telegraf',Inter,sans-serif;font-weight:700;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand .dot{width:10px;height:10px;border-radius:3px;background:var(--lime)}
+.nav ul{display:flex;gap:6px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+.nav ul::-webkit-scrollbar{display:none}
+.nav li a{display:block;padding:7px 12px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap}
+.nav li a:hover,.nav li a:focus-visible{background:var(--mist);color:var(--ink);outline:none}
+.hero{padding-block:clamp(44px,6vw,80px) clamp(24px,4vw,48px)}
+.hero h1{margin:14px 0 18px}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;font-family:inherit}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.ghost{border-color:var(--mist-2);color:var(--ink);background:var(--surface)}
+.btn:focus-visible{outline:3px solid var(--lime);outline-offset:2px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0E1714}}
+:root[data-theme="dark"] .btn.primary{color:#0E1714}
+section{padding-block:clamp(40px,5vw,72px)}
+section.alt{background:var(--surface);border-block:1px solid var(--mist)}
+.sec-head{max-width:68ch;margin-bottom:clamp(24px,3vw,40px)}
+.sec-head h2{margin:10px 0 12px}
+.shot{border-radius:14px;overflow:hidden;border:1px solid var(--mist);box-shadow:var(--shadow);margin:28px 0 0}
+.shot img{display:block;width:100%}
+.shot figcaption{padding:10px 14px;font-size:13.5px;color:var(--muted);background:var(--surface);border-top:1px solid var(--mist)}
+.map{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+@media (max-width:860px){.map{grid-template-columns:1fr}}
+.zone{background:var(--surface);border:1px solid var(--mist);border-radius:12px;padding:16px 18px;font-size:15px}
+.zone b{display:block;color:var(--ink);font-weight:600;margin-bottom:4px}
+.zone .k{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--sage);letter-spacing:.06em;margin-bottom:6px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+@media (max-width:860px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--surface);border:1px solid var(--mist);border-radius:var(--r);padding:22px 24px;display:grid;gap:10px}
+.panel h3{font-size:20px}
+.panel ul{margin:0;padding-left:20px;display:grid;gap:5px;font-size:15.5px}
+.panel .demo{font-size:14px;color:var(--lime-ink);background:var(--lime);border-radius:8px;padding:8px 12px;font-weight:500}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .panel .demo{color:#0B2A08}}
+:root[data-theme="dark"] .panel .demo{color:#0B2A08}
+.cmd{position:relative;background:var(--code-bg);color:var(--code-text);border-radius:12px;padding:14px 56px 14px 18px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.55;overflow-x:auto;white-space:pre}
+.cmd .copy{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.08);color:#D6F8D1;border:1px solid rgba(255,255,255,.14);border-radius:8px;font:600 12px Inter,sans-serif;padding:6px 10px;cursor:pointer}
+.note{border-left:4px solid var(--sage);background:var(--surface);padding:14px 18px;border-radius:10px;font-size:15.5px}
+.note.warn{border-left-color:var(--alert);background:var(--alert-bg)}
+.dl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px}
+@media (max-width:760px){.dl{grid-template-columns:1fr}}
+.dl a{display:grid;gap:4px;padding:16px;border-radius:12px;border:1px solid var(--mist-2);text-decoration:none;color:var(--text);background:var(--surface)}
+.dl a:hover{border-color:var(--sage)}
+.dl a b{font-weight:600;color:var(--ink)} .dl a span{font-size:13px;color:var(--muted)} .dl a code{font-size:12px;background:transparent;padding:0;color:var(--sage)}
+.steps{counter-reset:s;display:grid;gap:12px;margin-top:18px}
+.steps li{list-style:none;display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:start;background:var(--surface);border:1px solid var(--mist);border-radius:12px;padding:14px 16px;font-size:15.5px}
+.steps li::before{counter-increment:s;content:counter(s);width:32px;height:32px;border-radius:10px;display:grid;place-items:center;background:var(--ink);color:var(--lime);font-family:'PP Telegraf',Inter,sans-serif;font-size:16px}
+.steps ol,.steps{padding:0;margin:0}
+.tbl{width:100%;border-collapse:collapse;font-size:15px;background:var(--surface);border:1px solid var(--mist);border-radius:12px;overflow:hidden}
+.tbl th,.tbl td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--mist);vertical-align:top}
+.tbl th{font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--paper)}
+.tbl tr:last-child td{border-bottom:0}
+.tblwrap{overflow-x:auto}
+footer{padding-block:40px 60px;color:var(--muted);font-size:14px;border-top:1px solid var(--mist)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
+.macdlg{max-width:300px;background:#ECECEC;color:#111;border-radius:14px;padding:22px 18px 16px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,.25);font-family:-apple-system,Inter,sans-serif}
+.macdlg .app{width:64px;height:64px;border-radius:16px;margin:0 auto 12px;background:linear-gradient(135deg,#6d5cff,#c026d3);display:grid;place-items:center;color:#fff;font-weight:800;font-size:28px}
+.macdlg h5{margin:0 0 8px;font-size:13.5px;line-height:1.35} .macdlg p{font-size:11.5px;color:#444;line-height:1.35}
+.macdlg .b{margin-top:14px;display:grid;gap:6px} .macdlg .b span{display:block;padding:7px;border-radius:7px;font-size:12.5px;background:#fff;border:1px solid #cfcfcf} .macdlg .b span.primary{background:#2e6bff;color:#fff;border-color:#2e6bff}
+.macset{background:#F5F5F7;color:#111;border-radius:12px;overflow:hidden;border:1px solid #D9D9DE;font-family:-apple-system,Inter,sans-serif;box-shadow:0 20px 50px rgba(0,0,0,.18)}
+.macset .bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #E1E1E6;background:#ECECF0;font-size:13px;font-weight:600} .macset .bar i{width:11px;height:11px;border-radius:50%;display:inline-block}
+.macset .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 14px;font-size:13px;border-bottom:1px solid #E7E7EB} .macset .row small{display:block;color:#666;font-size:12px;margin-top:2px}
+.macset .row .btn2{flex:none;background:#fff;border:1px solid #C9C9CF;border-radius:7px;padding:5px 10px;font-size:12.5px;font-weight:600} .macset .row .btn2.hl{outline:3px solid var(--lime);outline-offset:2px}
+.macset .sec{padding:10px 14px 4px;font-size:12px;color:#666;font-weight:600}
+.mock{border-radius:14px;border:1px solid var(--mist-2);background:var(--paper);padding:18px;display:grid;gap:14px;justify-items:center}
+.mock .cap{font-size:12.5px;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;font-weight:600;justify-self:start}
+.mock p{justify-self:start}
+</style>
+
+<nav class="nav" aria-label="Sections">
+  <div class="wrap">
+    <a class="brand" href="https://claude.ai/artifact/Dx5jid3X5HBWRPBA8sfYSt"><span class="dot" aria-hidden="true"></span>/demo-video</a>
+    <ul>
+      <li><a href="https://claude.ai/artifact/Dx5jid3X5HBWRPBA8sfYSt">← Le guide</a></li>
+      <li><a href="#install">Installer</a></li>
+      <li><a href="#editeur">L'éditeur</a></li>
+      <li><a href="#panneaux">Les panneaux</a></li>
+      <li><a href="#export">Exporter</a></li>
+      <li><a href="#enregistrer">Enregistrer</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Framewave · éditeur vidéo local</p>
+    <h1>Ce que fait Framewave, et ce que /demo-video a déjà réglé.</h1>
+    <p class="lead">Enregistreur d'écran et éditeur vidéo, dans l'esprit de Screen Studio, développé par Sean. Tout tourne sur ta machine : rien n'est envoyé en ligne.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener">Télécharger</a>
+      <a class="btn ghost" href="https://github.com/seant-ctrl/framewave" target="_blank" rel="noopener">Le code sur GitHub</a>
+    </div>
+    <figure class="shot">
+      <img src="media/framewave-editor.jpg" alt="Framewave sur Mac avec un projet /demo-video : aperçu d'un plan Zeliq sous-titré, panneau Zoom à droite, timeline avec un clip par plan, la voix en blocs et les sous-titres">
+      <figcaption>Un projet livré par /demo-video : 17 clips, la voix off en blocs, les sous-titres, les marqueurs. Panneau Zoom ouvert à droite.</figcaption>
+    </figure>
+  </div>
+</header>
+
+<section id="install" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Installer</p>
+      <h2>Télécharger, glisser dans Applications, autoriser une fois.</h2>
+    </div>
+    <div class="dl">
+      <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Mac Apple Silicon</b><span>M1 à M4 · menu  → À propos de ce Mac → « Puce Apple »</span><code>…-arm64.dmg</code></a>
+      <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Mac Intel</b><span>Mac d'avant 2021</span><code>…-x64.dmg</code></a>
+      <a href="https://github.com/seant-ctrl/framewave/releases/latest" target="_blank" rel="noopener"><b>Windows 10 / 11</b><span>Installeur ou version portable</span><code>Framewave.Setup….exe</code></a>
+    </div>
+
+    <h3 style="margin:36px 0 6px">Sur Mac : le premier lancement</h3>
+    <p class="muted" style="margin-bottom:16px;max-width:70ch">Framewave n'est pas signé chez Apple (outil interne). macOS le bloque une fois, ça se règle en trois clics.</p>
+    <ol class="steps">
+      <li><div>Double-clique sur Framewave dans Applications. macOS affiche « Apple n'a pas pu vérifier… ». Clique <b>Terminé</b>.</div></li>
+      <li><div>Menu  → <b>Réglages Système</b> → <b>Confidentialité et sécurité</b>, tout en bas, section <b>Sécurité</b>.</div></li>
+      <li><div>Clique <b>Ouvrir quand même</b>, confirme avec Touch ID. C'est fini, macOS ne redemandera plus.</div></li>
+    </ol>
+    <div class="grid2" style="margin-top:18px">
+      <div class="mock">
+        <span class="cap">Étape 1</span>
+        <div class="macdlg" role="img" aria-label="Boîte de dialogue macOS, bouton Terminé"><div class="app">F</div><h5>Apple n'a pas pu vérifier que « Framewave » ne contient pas de logiciel malveillant.</h5><div class="b"><span class="primary">Terminé</span><span>Placer dans la corbeille</span></div></div>
+      </div>
+      <div class="mock">
+        <span class="cap">Étape 3</span>
+        <div class="macset" style="width:100%" role="img" aria-label="Réglages Système, bouton Ouvrir quand même"><div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i>&nbsp;Confidentialité et sécurité</div><div class="sec">Sécurité</div><div class="row"><div>« Framewave » a été bloqué pour protéger votre Mac.</div><span class="btn2 hl">Ouvrir quand même</span></div></div>
+      </div>
+    </div>
+    <div class="note warn" style="margin-top:18px">Message « application endommagée » ? Terminal : <code>xattr -cr /Applications/Framewave.app</code></div>
+    <div class="note" style="margin-top:12px">Pour retoucher un projet /demo-video, aucune autre autorisation. Enregistrement d'écran, Caméra, Micro, Accessibilité ne servent que si tu enregistres ton écran avec Framewave.</div>
+  </div>
+</section>
+
+<section id="editeur">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">L'éditeur</p>
+      <h2>Trois zones.</h2>
+      <p class="lead">L'accueil liste tes projets, le plus récent en premier. Un clic ouvre l'éditeur.</p>
+    </div>
+    <div class="map">
+      <div class="zone"><span class="k">CENTRE</span><b>L'aperçu</b>Le rendu final en direct. Les formats (16:9, 9:16, 1:1…) au-dessus, le bouton <b>Export</b> en haut à droite.</div>
+      <div class="zone"><span class="k">BAS</span><b>La timeline</b>Une piste par type : vidéo, zoom, texte, sous-titres, audio. Glisser, couper, supprimer, poser des marqueurs.</div>
+      <div class="zone"><span class="k">DROITE</span><b>Le panneau</b>La colonne d'icônes change de panneau : fond, mise en page, zoom, curseur, audio, texte, sous-titres…</div>
+    </div>
+    <p class="muted" style="margin-top:18px;font-size:15px"><kbd>Espace</kbd> lecture · <kbd>⌘Z</kbd> annuler · <kbd>S</kbd> couper · <kbd>Suppr</kbd> effacer. Sauvegarde automatique.</p>
+  </div>
+</section>
+
+<section id="panneaux" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Les panneaux</p>
+      <h2>Ce que chacun permet, et son état dans un projet /demo-video.</h2>
+    </div>
+    <div class="grid2">
+      <article class="panel">
+        <h3>Timeline et clips</h3>
+        <ul>
+          <li>Réordonner, couper, supprimer, changer la vitesse</li>
+          <li>Transitions : fondu, noir, glissement, zoom, flou</li>
+          <li>Marqueurs nommés, aimantation</li>
+        </ul>
+        <p class="demo">Livré : un clip par plan, un marqueur par plan, fondu après le titre et avant la fin.</p>
+      </article>
+      <article class="panel">
+        <h3>Audio</h3>
+        <ul>
+          <li>Blocs déplaçables et coupables, fondus</li>
+          <li>Import mp3, wav, m4a ; musique en boucle</li>
+          <li>Suppression des silences en un clic</li>
+        </ul>
+        <p class="demo">Livré : la voix off en un bloc par plan. Musique à 12 % si tu en as donné une.</p>
+      </article>
+      <article class="panel">
+        <h3>Sous-titres</h3>
+        <ul>
+          <li>Transcription Whisper, en local</li>
+          <li>Import et export SRT / VTT</li>
+          <li>Style, position, surlignage mot à mot</li>
+        </ul>
+        <p class="demo">Livré : les phrases du script, calées sur la voix. Relis, corrige, ou relance Whisper.</p>
+      </article>
+      <article class="panel">
+        <h3>Texte</h3>
+        <ul>
+          <li>Presets : titre, bandeau bas, badge, note</li>
+          <li>Animations : fondu, glissement, pop, machine à écrire</li>
+        </ul>
+        <p class="demo">Livré : vide, les pastilles sont dans l'image. Ajoute un texte si un point mérite plus.</p>
+      </article>
+      <article class="panel">
+        <h3>Zoom et curseur</h3>
+        <ul>
+          <li>Zoom auto depuis les clics (sur un enregistrement Framewave)</li>
+          <li>Segments de zoom manuels, curseur redessiné, effets de clic</li>
+        </ul>
+        <p class="demo">Livré : désactivés, la caméra est déjà dans l'image. Un zoom ajouté zoomerait une image déjà zoomée.</p>
+      </article>
+      <article class="panel">
+        <h3>Fond et mise en page</h3>
+        <ul>
+          <li>Dégradés, fonds d'écran, couleur, image, transparent</li>
+          <li>Marge, coins arrondis, ombre, recadrage</li>
+          <li>Formats 16:9, 9:16, 1:1, 4:5, sortie 720p à 4K</li>
+        </ul>
+        <p class="demo">Livré : fond noir, plein cadre, 16:9 1080p. Pour LinkedIn, passe en 4:5 avec une marge.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="export">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Exporter</p>
+      <h2>Le bouton violet, en haut à droite.</h2>
+    </div>
+    <div class="tblwrap">
+      <table class="tbl">
+        <tr><th>Réglage</th><th>Options</th><th>Pour une démo</th></tr>
+        <tr><td>Format</td><td>MP4, WebM, GIF, PNG, MP3</td><td><b>MP4 H.264</b>, lu partout</td></tr>
+        <tr><td>Résolution</td><td>480p à 2160p</td><td><b>1080p</b></td></tr>
+        <tr><td>Images / s</td><td>24, 30, 60</td><td><b>30</b></td></tr>
+        <tr><td>Qualité</td><td>Draft, Good, High, Lossless</td><td><b>High</b></td></tr>
+        <tr><td>Plage</td><td>Tout, ou entre deux points</td><td>Pour extraire un teaser</td></tr>
+      </table>
+    </div>
+    <p class="muted" style="margin-top:14px;font-size:15px">L'export passe par la carte graphique : deux minutes de film sortent en moins d'une minute.</p>
+  </div>
+</section>
+
+<section id="enregistrer" class="alt">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Enregistrer</p>
+      <h2>Framewave enregistre aussi ton écran.</h2>
+      <p class="lead">Pour une démo live rapide ou un bug à montrer. Un enregistrement Framewave est aussi une source acceptée par /demo-video.</p>
+    </div>
+    <div class="grid2">
+      <article class="panel">
+        <h3>Ce qu'il capture</h3>
+        <ul>
+          <li>Écran entier, fenêtre, ou zone dessinée</li>
+          <li>Webcam, micro, audio système</li>
+          <li>30 ou 60 images par seconde</li>
+          <li>Souris et clics, pour le zoom auto et le curseur redessiné</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h3>Pendant</h3>
+        <ul>
+          <li><kbd>⌃⇧R</kbd> démarrer et arrêter, <kbd>⌃⇧P</kbd> pause</li>
+          <li>La barre de contrôle n'apparaît pas dans la capture</li>
+          <li>À l'arrêt, l'éditeur s'ouvre sur l'enregistrement</li>
+        </ul>
+        <p class="demo">Sur Mac, accorde Enregistrement de l'écran, Caméra, Micro et Accessibilité quand Framewave le demande.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="https://claude.ai/artifact/Dx5jid3X5HBWRPBA8sfYSt">← Le guide /demo-video</a>
+    <span>Code et versions : <a href="https://github.com/seant-ctrl/framewave" target="_blank" rel="noopener">seant-ctrl/framewave</a></span>
+    <span>Un bug, une idée : Sean Tiffonnet.</span>
+  </div>
+</footer>

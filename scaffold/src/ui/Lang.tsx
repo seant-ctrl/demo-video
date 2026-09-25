@@ -1,0 +1,14 @@
+import React from 'react';
+import {makeData} from '../data.mjs';
+import {TEXTS} from '../texts.mjs';
+import {DEMO} from '../demo.mjs';
+export type Lang = 'fr' | 'en';
+export type Data = ReturnType<typeof makeData>;
+export type Texts = (typeof TEXTS)['fr'];
+const cache: Partial<Record<Lang, Data>> = {};
+const DEF = (DEMO.lang ?? 'fr') as Lang;
+export const dataFor = (lang: Lang = DEF): Data => (cache[lang] ??= makeData(lang));
+export const textsFor = (lang: Lang = DEF): Texts => (TEXTS as Record<string, Texts>)[lang] ?? TEXTS.fr;
+export const LangContext = React.createContext<Lang>(DEF);
+export const useLang = () => React.useContext(LangContext);
+export const useData = () => dataFor(useLang());
