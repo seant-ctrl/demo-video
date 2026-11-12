@@ -1,7 +1,9 @@
 // ElevenLabs TTS : un fichier par plan → public/vo/<id>.mp3 + manifest.json {id:{file,seconds,words}}.
 // Script lu dans voiceover/script-<lang>.json ([{id, text}]). Langue = demo.config.json → lang (ou ELEVEN_LANG).
 // Clé : env ELEVENLABS_API_KEY, sinon ./.env, sinon ~/.demo-video/.env. Jamais affichée, jamais écrite dans un livrable.
-// Options : --force (régénère tout) · --only=p03,p04 · ELEVEN_VOICE_ID · ELEVEN_MODEL · ELEVEN_SPEED
+// Options : --force (régénère tout) · --only=p03,p04 · ELEVEN_VOICE_ID · ELEVEN_MODEL
+// Modèle : Eleven v4 (eleven_v4), le plus naturel. Doc : https://elevenlabs.io/docs/overview/capabilities/text-to-speech/eleven-v4
+// v4 n'a ni `style` ni `speed` (ignorés), pas de SSML : les pauses et l'intention passent par la ponctuation et les audio tags [ ].
 import fs from 'node:fs'; import os from 'node:os'; import path from 'node:path'; import {execSync} from 'node:child_process'; import {fileURLToPath} from 'node:url';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const cfg = JSON.parse(fs.readFileSync(root + 'demo.config.json', 'utf8'));
@@ -14,9 +16,10 @@ const key = process.env.ELEVENLABS_API_KEY || readKey(root + '.env') || readKey(
 if (!key) { console.error('No ELEVENLABS_API_KEY (env, ./.env ou ~/.demo-video/.env)'); process.exit(1); }
 // George (JBFqnCBsd6RMkjVDRZzb) : voix multilingue du catalogue par défaut, lit correctement le français. Disponible sur le plan Free.
 const VOICE = process.env.ELEVEN_VOICE_ID || cfg.voice?.id || 'JBFqnCBsd6RMkjVDRZzb';
-const MODEL = process.env.ELEVEN_MODEL || cfg.voice?.model || 'eleven_multilingual_v2';
-const SPEED = Number(process.env.ELEVEN_SPEED || cfg.voice?.speed || 1.0);
-const SETTINGS = {stability: 0.55, similarity_boost: 0.75, style: 0.25, speed: SPEED, use_speaker_boost: true, ...(cfg.voice?.settings ?? {})};
+const MODEL = process.env.ELEVEN_MODEL || cfg.voice?.model || 'eleven_v4';
+// stability : bas = plus expressif et variable, haut = plus régulier. 0,5 pour une voix off produit posée.
+// similarity_boost : fidélité à la voix d'origine ; trop haut peut rendre moins naturel.
+const SETTINGS = {stability: 0.5, similarity_boost: 0.75, use_speaker_boost: true, ...(cfg.voice?.settings ?? {})};
 const force = process.argv.includes('--force');
 const only = process.argv.find((a) => a.startsWith('--only='))?.slice(7).split(',');
 const out = root + 'public/vo/'; fs.mkdirSync(out, {recursive: true});

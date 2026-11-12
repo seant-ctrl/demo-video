@@ -182,6 +182,12 @@ section.alt{background:var(--surface);border-block:1px solid var(--mist)}
 .el .k .sw{width:30px;height:17px;border-radius:999px;background:#3B3B48;position:relative}
 .el .k .sw::after{content:"";position:absolute;top:2px;left:2px;width:13px;height:13px;border-radius:50%;background:#fff}
 .el .k .sw.on{background:var(--lime)}.el .k .sw.on::after{left:15px}
+.vtbl{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--paper);border:1px solid var(--mist);border-radius:12px;overflow:hidden;min-width:520px}
+.vtbl th,.vtbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--mist);vertical-align:top}
+.vtbl th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.vtbl tr:last-child td{border-bottom:0}
+.tblwrap{overflow-x:auto}
+.note ul.links{margin:8px 0 0;padding-left:20px;display:grid;gap:4px}
 .el .cta{margin-top:10px;display:inline-block;background:#fff;color:#0B0B0F;font-weight:600;font-size:12.5px;padding:7px 12px;border-radius:7px}
 
 /* docs */
@@ -448,7 +454,7 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
         <div class="num">4</div>
         <div class="body">
           <h3>Clé ElevenLabs pour la voix off <span class="tag opt">optionnel</span></h3>
-          <p>Sans clé : film muet avec légendes, et le script de voix off quand même. Avec : une voix naturelle, une phrase par plan.</p>
+          <p>Il faut une clé API <b>Text to Speech</b>. Sans clé : film muet avec légendes, et le script de voix off quand même. Avec : une voix naturelle en Eleven v4, une phrase par plan.</p>
           <div class="pair">
             <ol>
               <li><a href="https://elevenlabs.io/app/sign-in" target="_blank" rel="noopener">elevenlabs.io</a>, identifiants dans <b>1Password</b> (coffre partagé, « ElevenLabs »).</li>
@@ -470,6 +476,28 @@ footer .wrap{display:flex;flex-wrap:wrap;gap:12px 28px;align-items:center}
           </div>
           <div class="cmd"><button class="copy" type="button" data-copy>Copier</button>mkdir -p ~/.demo-video && printf 'ELEVENLABS_API_KEY=COLLE_TA_CLE_ICI\n' > ~/.demo-video/.env && chmod 600 ~/.demo-video/.env</div>
           <div class="note warn"><b>Jamais la clé dans une conversation Claude ni dans Slack.</b> Ce fichier est son seul endroit. En cas de fuite : révoque et recrée, une minute.</div>
+
+          <h4 style="margin-top:6px">Le modèle : Eleven v4</h4>
+          <p>Le skill utilise <b>Eleven v4</b> (<code>eleven_v4</code>), le modèle text-to-speech le plus naturel d'ElevenLabs. C'est lui qui donne une voix off de qualité, en français comme en anglais. Rien à régler de ton côté, c'est le défaut.</p>
+          <div class="tblwrap">
+            <table class="vtbl">
+              <tr><th>Réglage</th><th>Valeur</th><th>Ce que ça fait</th></tr>
+              <tr><td>Stability</td><td><b>0,5</b></td><td>Plus bas : plus expressif, plus variable. Plus haut : plus régulier, plus monotone.</td></tr>
+              <tr><td>Similarity</td><td><b>0,75</b></td><td>Fidélité à la voix choisie. Trop haut, elle sonne moins naturelle.</td></tr>
+              <tr><td>Speaker boost</td><td><b>activé</b></td><td>Renforce la ressemblance avec la voix.</td></tr>
+              <tr><td>Langue</td><td><b>fr</b> ou <b>en</b></td><td>Évite qu'un mot anglais change l'accent.</td></tr>
+              <tr><td>Style, vitesse</td><td><b>n'existent pas en v4</b></td><td>Le rythme se règle à l'écriture : phrases courtes, ponctuation.</td></tr>
+            </table>
+          </div>
+          <div class="note">
+            <b>La doc à garder sous la main</b>
+            <ul class="links">
+              <li><a href="https://elevenlabs.io/docs/overview/capabilities/text-to-speech/eleven-v4" target="_blank" rel="noopener">Eleven v4</a> : le modèle, les langues, les réglages disponibles.</li>
+              <li><a href="https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices#prompting-eleven-v4" target="_blank" rel="noopener">Écrire pour v4</a> : pauses, emphase, audio tags comme <code>[posé]</code> ou <code>[enthousiaste]</code>.</li>
+              <li><a href="https://elevenlabs.io/docs/api-reference/text-to-speech/convert" target="_blank" rel="noopener">Paramètres de l'API</a> : stability, similarity, langue, continuité entre phrases.</li>
+              <li><a href="https://elevenlabs.io/docs/overview/models" target="_blank" rel="noopener">Comparatif des modèles</a> : limites, cas d'usage, v4 et v4 Turbo.</li>
+            </ul>
+          </div>
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 # {{Nom}} — voice-over script
 
 > **Langue parlée : {{français}}**, script {{anglais}} aligné en référence (décision intake du {{JJ/MM}}).
-> Voix : ElevenLabs **{{George}}** `{{JBFqnCBsd6RMkjVDRZzb}}`, `{{eleven_multilingual_v2}}`, stability 0,55 / similarity 0,75 / style 0,25, speed 1,0, `language_code: {{fr}}`.
+> Voix : ElevenLabs **{{George}}** `{{JBFqnCBsd6RMkjVDRZzb}}`, modèle **Eleven v4** (`eleven_v4`), stability {{0,5}} / similarity {{0,75}} / speaker boost, `language_code: {{fr}}`. Pas de `style` ni `speed` en v4.
 > **L'audio est la source de vérité.** Chaque plan dure max(chorégraphie, VO + 0,67 s). Budget d'écriture : {{2,4}} mots/s. Débit mesuré après génération : {{—}} mots/s (2.4).
 > Règle tenue sur tous les plans : la voix ne nomme que ce qui est à l'écran au moment où c'est dit (colonne « visible »).
 

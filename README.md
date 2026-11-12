@@ -28,7 +28,7 @@ Doc et code : <https://github.com/seant-ctrl/framewave> (README = fonctionnalit�
 |---|---|---|
 | Node ≥ 20 | Remotion, scripts | `brew install node` |
 | Google Chrome | captures headless des états | <https://www.google.com/chrome/> |
-| ElevenLabs (clé API) | voix off, un MP3 par plan | `mkdir -p ~/.demo-video && printf 'ELEVENLABS_API_KEY=…\n' > ~/.demo-video/.env && chmod 600 ~/.demo-video/.env` |
+| ElevenLabs (clé API, Text to Speech) | voix off en **Eleven v4** (`eleven_v4`), un MP3 par plan. Réglages et doc : `references/voiceover.md` | `mkdir -p ~/.demo-video && printf 'ELEVENLABS_API_KEY=…\n' > ~/.demo-video/.env && chmod 600 ~/.demo-video/.env` |
 | Skills Remotion (conseillé) | bonnes pratiques quand Claude touche au TSX | `npx skills add remotion-dev/skills -g -a claude-code -s remotion-best-practices -s remotion-markup -s remotion-render -s remotion-studio -y` (4 skills suffisent : un `-s` par skill, la liste à virgules n'est pas lue) — <https://www.remotion.dev/docs/ai/skills> |
 | Police Zeliq PP Telegraf (optionnel) | cartons titre et fin à la marque. Police sous licence, jamais dans ce repo : sans elle, les cartons sont en Inter | demande le fichier à Sean, puis `mkdir -p ~/.demo-video/fonts` et place `PPTelegraf-Bold.ttf` dedans |
 | PyMuPDF (slides seulement) | rasteriser un PDF en PNG | `pip3 install pymupdf` |

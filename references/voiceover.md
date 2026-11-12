@@ -10,23 +10,43 @@
 - Génération = crédits consommés : **jamais avant le go de Gate 2**, jamais `--force` sans raison. Un texte modifié
   dans `script-<lang>.json` régénère seulement sa piste (le manifest garde le texte généré).
 
-## Réglages qui ont fait leurs preuves
+## Réglages : Eleven v4
+
+On utilise **Eleven v4** (`eleven_v4`), le modèle le plus naturel d'ElevenLabs : c'est lui qui donne une voix off de qualité.
+Doc de référence, à relire avant de toucher aux réglages :
+
+- Le modèle : <https://elevenlabs.io/docs/overview/capabilities/text-to-speech/eleven-v4>
+- Écrire pour v4 (audio tags, pauses, emphase) : <https://elevenlabs.io/docs/overview/capabilities/text-to-speech/best-practices#prompting-eleven-v4>
+- Les paramètres de l'API : <https://elevenlabs.io/docs/api-reference/text-to-speech/convert>
+- Limites par modèle (10 000 caractères par requête en v4) : <https://elevenlabs.io/docs/overview/models>
 
 | Paramètre | Valeur | Pourquoi |
 |---|---|---|
-| Voix | **George** `JBFqnCBsd6RMkjVDRZzb` | catalogue par défaut (disponible sur le plan Free), multilingue, lit un français propre. Les voix de bibliothèque partagée renvoient **402** sur Free |
-| Modèle | `eleven_multilingual_v2` | prosodie stable, `language_code` respecté |
-| `voice_settings` | stability 0,55 · similarity 0,75 · style 0,25 · speed 1,0 · speaker boost | un ton posé, sans emphase marketing |
+| Modèle | `eleven_v4` | le plus naturel, 90+ langues dont le français. `eleven_v4_turbo` existe mais vise le temps réel (agents conversationnels), pas la voix off |
+| Voix | **George** `JBFqnCBsd6RMkjVDRZzb` par défaut | voix du catalogue standard, lit bien le français. Les voix de la Voice Library et les Professional Voice Clones sont recommandées sur v4 par ElevenLabs, à tester avec `--only=p00` |
+| `stability` | 0,5 | bas = plus expressif et variable d'une prise à l'autre ; haut = plus régulier, plus monotone. 0,4 à 0,6 pour une voix off produit |
+| `similarity_boost` | 0,75 | fidélité à la voix d'origine. Plus haut peut rendre la voix moins naturelle |
+| `use_speaker_boost` | true | renforce la ressemblance, coût de latence négligeable en génération différée |
+| `style`, `speed` | **absents** | non disponibles en v4 : l'API les accepte mais les ignore. Le débit se règle par l'écriture (phrases courtes, ponctuation) |
+| `clone_strength` | 0 | seulement pour une Professional Voice Clone affinée sur v4 ; 0,5 en repli si la voix dérive |
+| `language_code` | `fr` ou `en` | force la langue, évite qu'un mot anglais fasse basculer l'accent |
 | `previous_text` / `next_text` | toujours | la prosodie enchaîne d'un plan au suivant au lieu de repartir à plat à chaque MP3 |
 | Sortie | `mp3_44100_128`, un fichier **par plan** | c'est ce qui permet le recalage plan par plan et les blocs Framewave |
 | Mesure | `afinfo` (macOS), sinon `ffprobe` | la durée mesurée fixe le plancher du plan |
 
-Voix française native, autre langue, autre voix : `ELEVEN_VOICE_ID`, `ELEVEN_MODEL`, `ELEVEN_LANG`, ou `voice:{id, model, speed, settings}`
-dans `demo.config.json`. Vérifier avec `--only=p00` avant de lancer toute la série.
+Ce qui change à l'écriture avec v4 :
+
+- **Pas de SSML** (`<break>` ignoré). Les pauses passent par les points de suspension, la ponctuation et la structure des phrases.
+- **Audio tags** entre crochets pour l'intention : `[posé]`, `[enthousiaste]`, `[chuchote]`. À doser : un par phrase au plus, jamais sur une phrase qui cite un libellé d'UI. Le respect des tags progresse mais n'est pas garanti, réécouter le plan.
+- **Majuscules = emphase.** Ne pas écrire un nom de produit en capitales par habitude, le TTS l'appuierait.
+- **Prononciation** d'un nom propre difficile : IPA en ligne entre barres obliques, ou dictionnaire de prononciation côté API.
+
+Autre voix, autre modèle : `ELEVEN_VOICE_ID`, `ELEVEN_MODEL`, ou `voice:{id, model, settings}` dans `demo.config.json`.
+Toujours tester avec `--only=p00` avant de lancer toute la série.
 
 ## Écrire le script
 
-Débit mesuré sur George : **FR 2,42 mots/s, EN ≈ 2,6 mots/s**. Budget par plan = `(durée visée − 0,7 s) × débit`.
+Débit mesuré sur George en `eleven_multilingual_v2` : **FR 2,42 mots/s, EN ≈ 2,6 mots/s**. Le recaler après la première génération en v4 (`npm run vo` affiche le débit réel). Budget par plan = `(durée visée − 0,7 s) × débit`.
 Viser **65–80 % de temps parlé** sur le film : en dessous, ça flotte ; au-dessus, on ne lit plus les pastilles.
 
 Règles d'écriture (toutes vérifiées sur les deux démos) :
